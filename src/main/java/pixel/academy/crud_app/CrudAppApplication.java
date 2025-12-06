@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import pixel.academy.crud_app.dao.StudentDAO;
 import pixel.academy.crud_app.entity.Student;
 
+import java.util.List;
+
 @SpringBootApplication
 public class CrudAppApplication {
 
@@ -20,7 +22,12 @@ public class CrudAppApplication {
         return runner -> {
             //createStudent(studentDAO);
             //createMultileStudents(studentDAO);
-            readStudent(studentDAO);
+            //readStudent(studentDAO);
+            //queryForStudents(studentDAO);
+            //queryForStudentsByLastName(studentDAO);
+            //updateStudent(studentDAO);
+            //deleteStudent(studentDAO);
+            deleteAllStudent(studentDAO);
         };
     }
 
@@ -73,4 +80,53 @@ public class CrudAppApplication {
         System.out.println("Found the student: " + myStudent);
     }
 
+    private void queryForStudents(StudentDAO studentDAO) {
+        //obtain list of students
+        List<Student> theStudents = studentDAO.findAll();
+
+        //display list of students
+        for (Student newStudent : theStudents) {
+            System.out.println(newStudent);
+        }
+    }
+
+    private void queryForStudentsByLastName(StudentDAO studentDAO) {
+        //return list of students
+        List<Student> theStudent = studentDAO.findByLastName("Popescu");
+
+        //display list of students
+        for(Student newStudent : theStudent) {
+            System.out.println(newStudent);
+        }
+    }
+
+    private void updateStudent(StudentDAO studentDAO) {
+        //find student in database using ID (primary key)
+        int studentId = 1;
+        System.out.println("Getting student with id: " + studentId);
+        Student newStudent = studentDAO.findById(studentId);
+
+        //modify student first name in ,,Ion"
+        System.out.println("Updating student...");
+        newStudent.setFirstName("Ion");
+
+        //save modified in database
+        studentDAO.update(newStudent);
+
+        //display student details updated
+        System.out.println("Update student: " + newStudent);
+    }
+
+    private void deleteStudent(StudentDAO studentDAO) {
+
+        int studentId = 3;
+        System.out.println("Deleting student id: " + studentId);
+        studentDAO.delete(studentId);
+    }
+
+    private void deleteAllStudent(StudentDAO studentDAO) {
+        System.out.println("Deleting all students.");
+        int numRowsDeleted = studentDAO.deleteAll();
+        System.out.println("Deleted row count: " + numRowsDeleted);
+    }
 }
